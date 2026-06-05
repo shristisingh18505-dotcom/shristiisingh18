@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card p-4">
+  <h5>Student Report Card</h5>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="row"><div class="col-md-3 mb-3">{{ form.student_id.label }} {{ form.student_id(class="form-control") }}</div></div>
+    <button class="btn btn-primary">Generate PDF</button>
+  </form>
+  <div class="alert alert-secondary small mt-3">
+    Use /api/students to view IDs quickly.
+  </div>
+</div>
+{% endblock %}

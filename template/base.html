@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card p-4">
+  <h5>Attendance</h5>
+  <form class="row g-3" method="get">
+    <div class="col-auto">
+      <label for="course_id" class="col-form-label">Course ID</label>
+    </div>
+    <div class="col-auto">
+      <input type="number" class="form-control" id="course_id" name="course_id" placeholder="e.g. 1">
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-outline-secondary">Load Students</button>
+    </div>
+  </form>
+
+  {% if enrolled %}
+  <hr>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="row">
+      <div class="col-md-3 mb-3">{{ form.course_id.label }} {{ form.course_id(class="form-control", value=request.args.get('course_id')) }}</div>
+      <div class="col-md-3 mb-3">{{ form.att_date.label }} {{ form.att_date(class="form-control") }}</div>
+    </div>
+    <div class="mb-3"><strong>Mark Present:</strong></div>
+    <div class="row">
+      {% for e in enrolled %}
+      <div class="col-md-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="{{ e.id }}" id="chk{{ e.id }}">
+          <label class="form-check-label" for="chk{{ e.id }}">
+            {{ e.student.name }} ({{ e.student.roll_no }})
+          </label>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <input type="hidden" name="present_list" id="present_list">
+    <button class="btn btn-primary mt-3" onclick="collect()">Save Attendance</button>
+  </form>
+  <script>
+    function collect(){
+      const boxes = document.querySelectorAll('.form-check-input:checked');
+      const ids = Array.from(boxes).map(b=>b.value).join(',');
+      document.getElementById('present_list').value = ids;
+    }
+  </script>
+  {% endif %}
+</div>
+{% endblock %}
